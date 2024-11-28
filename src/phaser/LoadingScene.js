@@ -8,11 +8,11 @@ export default class LoadingScene extends Phaser.Scene {
 
     preload() {
         // 이미지 로드
-        this.load.image('hamster', './assets/02_hamster.png');
-        this.load.image('fryingpan', './assets/03_fryingpan.png');
-        this.load.image('background6', './assets/47_background6.jpeg');
-        this.load.image('header2', './assets/48_header2.png');
-        this.load.image('instruction', './assets/58_instruction.png')
+        this.load.image('hamster', '/assets/02_hamster.png');
+        this.load.image('fryingpan', '/assets/03_fryingpan.png');
+        this.load.image('background6', '/assets/47_background6.jpeg');
+        this.load.image('header2', '/assets/48_header2.png');
+        this.load.image('instruction', '/assets/58_instruction.png')
     }
 
     create() {
