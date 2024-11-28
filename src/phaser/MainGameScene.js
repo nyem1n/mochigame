@@ -26,7 +26,7 @@ class MainGameScene extends Phaser.Scene {
 
     preload() {
         // 이미지 로드
-        this.load.image('background2', '/src/assets/24_background2.png');
+        this.load.image('background2', '/assets/24_background2.png');
         this.load.image('board', '/src/assets/04_board.png');
         this.load.image('redbeanspoon', '/src/assets/06_redbeanspoon.png')
         this.load.image('ricedoughspoon', '/src/assets/07_ricedoughspoon.png')

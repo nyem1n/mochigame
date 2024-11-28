@@ -7,5 +7,6 @@ export default defineConfig({
   build: {
     outDir: 'dist', // 빌드 출력 디렉토리
     assetsDir: 'assets', // 정적 파일 디렉토리 설정
+    publicDir: 'src/assets',
   },
 });
