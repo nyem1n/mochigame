@@ -1,8 +1,6 @@
 import Phaser from 'phaser';
 import '../App.css';
 
-
-
 class MainGameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainGameScene' });
@@ -25,7 +23,6 @@ class MainGameScene extends Phaser.Scene {
     }
 
     preload() {
-        // 이미지 로드
         this.load.image('background2', '/assets/24_background2.png');
         this.load.image('board', '/assets/04_board.png');
         this.load.image('redbeanspoon', '/assets/06_redbeanspoon.png')
@@ -219,13 +216,12 @@ class MainGameScene extends Phaser.Scene {
         let scaleX = this.timeLeft / this.totalTime;
     
         // 게이지 바 배경의 너비를 조정하고 위치를 고정
-        const originalWidth = 360; // 원래의 배경 너비
+        const originalWidth = 360; // 원래의 배경
         this.gaugeBarBackground.displayWidth = originalWidth * scaleX;
     
-        // 게이지 바 배경의 x 위치를 조정하여 왼쪽이 고정된 상태에서 오른쪽으로 줄어들게 함
+        // 왼쪽이 고정된 상태에서 오른쪽으로 줄어들게
         this.gaugeBarBackground.x = 800 - (originalWidth * (1 - scaleX)) / 2;
-    
-        // 시간이 다 되면 GameOverScene으로 이동
+        
         if (this.timeLeft <= 0) {
             // 게임이 종료되었을 때 점수를 저장하고 GameOverScene으로 이동
             this.sound.play('bell');

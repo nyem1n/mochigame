@@ -73,18 +73,18 @@ export default class LoadingScene extends Phaser.Scene {
 
     // 게임 설명 출력
     showInstruction() {
-        // 게임 설명이 담긴 이미지를 화면에 추가
+        // 이미지 추가
         this.instructionImage = this.add.image(this.scale.width / 2, this.scale.height / 2, 'instruction')
             .setOrigin(0.5)
-            .setScale(0.7) // 필요에 따라 이미지 크기 조정
-            .setInteractive(); // 상호작용 가능하게 설정
+            .setScale(0.7) 
+            .setInteractive();
     
-        this.instructionVisible = true; // 게임 설명 이미지가 표시되고 있음을 나타냄
+        this.instructionVisible = true; // 게임 설명 이미지가 표시되고 있음
     
-        // 이미지 클릭 시 이미지를 제거하는 이벤트 리스너 추가
+        // 이미지 클릭 시 이미지를 제거하는 이벤트 리스너 
         this.instructionImage.on('pointerdown', () => {
             this.instructionImage.destroy(); // 이미지 제거
-            this.instructionVisible = false; // 설명이 사라졌음을 나타냄
+            this.instructionVisible = false; // 설명이 사라짐
         });
     }
     
@@ -96,7 +96,7 @@ export default class LoadingScene extends Phaser.Scene {
         const height = gameSize.height;
     
         // 화면 크기에 맞게 스케일 계산
-        const scaleFactor = Math.min(width / 1280, height / 900); // 800x600은 원래 이미지 기준 크기 예시
+        const scaleFactor = Math.min(width / 1280, height / 900); 
     
         // 배경 이미지와 주요 이미지를 다시 배치 및 크기 조절
         this.background.setPosition(width / 2, height / 2).setScale(scaleFactor);
