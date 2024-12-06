@@ -112,16 +112,16 @@ class MainGameScene extends Phaser.Scene {
         });
 
         //도마, 통 배치
-        this.board = this.add.image(750, 560, 'board').setScale(0.7, 1.15);
-        this.ricedoughbowl = this.add.image(1220, 430, 'ricedoughbowl').setInteractive().setScale(0.3)
+        this.board = this.add.image(750, 570, 'board').setScale(0.7, 1.15);
+        this.ricedoughbowl = this.add.image(1220, 410, 'ricedoughbowl').setInteractive().setScale(0.3).setOrigin(0.5)
         .on('pointerover', () => {
-            this.ricedoughbowl.setScale(0.33);
+            this.ricedoughbowl.setScale(0.32);
         }).on('pointerout', () => {
             this.ricedoughbowl.setScale(0.3); 
         });
-        this.redbeanpastebowl = this.add.image(1220, 640, 'redbeanpastebowl').setInteractive().setScale(0.3)
+        this.redbeanpastebowl = this.add.image(1220, 660, 'redbeanpastebowl').setInteractive().setScale(0.3).setOrigin(0.5)
         .on('pointerover', () => {
-            this.redbeanpastebowl.setScale(0.33);
+            this.redbeanpastebowl.setScale(0.32);
         }).on('pointerout', () => {
             this.redbeanpastebowl.setScale(0.3); 
         });
@@ -163,6 +163,11 @@ class MainGameScene extends Phaser.Scene {
         this.scoreText = this.add.text(800, 192, '0', { fontSize: '32px', fill: '#000' });
 
         this.spawnCustomer();
+        
+        this.customerTimerText = this.add.text(1150, 100, '6', { fontSize: '32px', fill: '#F57C5B', fontFamily: 'HakgyoansimDunggeunmisoTTF-B' })
+        .setOrigin(0.5)
+        .setVisible(false); // 손님 타이머 텍스트
+
     }
 
     update() {
@@ -196,7 +201,10 @@ class MainGameScene extends Phaser.Scene {
     startGame() {
         this.isGameActive = true;
         this.remainingTime = this.totalTime;
-        
+    
+        // 손님 타이머를 보이게 설정
+        this.customerTimerText.setVisible(true);
+    
         // 첫 번째 손님 표시
         this.spawnCustomer();
     
@@ -208,6 +216,7 @@ class MainGameScene extends Phaser.Scene {
             loop: true
         });
     }
+    
 
     updateGaugeBar() {
         this.timeLeft -= 1;
@@ -294,7 +303,7 @@ class MainGameScene extends Phaser.Scene {
                 this.clearCurrentItem();
                 this.spawnCustomer();
             } else {
-                // 잘못된 모찌를 전달했을 때 angrycus 이미지를 표시
+                // 잘못된 모찌를 전달했을 때만 화난 손님 표시
                 this.showAngryCustomer(() => {
                     this.clearCurrentItem();
                     this.spawnCustomer(); // 다음 손님 호출
@@ -310,6 +319,7 @@ class MainGameScene extends Phaser.Scene {
             });
         }
     }
+    
 
     showAngryCustomer(callback) {
         if (this.angryCustomer) {
@@ -429,7 +439,7 @@ class MainGameScene extends Phaser.Scene {
                 orderFruitKey = 'mango';
                 break;
             default:
-                orderFruitKey = null; // 특별한 손님이나 화난 손님일 경우 표시하지 않음
+                orderFruitKey = null; // 특별한 손님일 경우 표시하지 않음
                 break;
         }
     
@@ -439,22 +449,23 @@ class MainGameScene extends Phaser.Scene {
             this.currentCustomerOrder = null; // 특별한 손님일 경우 표시를 건너뜀
         }
     
+        // 손님 타이머 텍스트 초기화
+        this.customerTimerText.setText(this.currentCustomerData.timeLimit / 1000);
+    
         // 손님 시간 제한 타이머 설정 (게임이 시작된 이후에만 작동)
         if (this.customerTimer) {
             this.customerTimer.remove(); // 이전 타이머 제거
         }
     
-        this.customerTimer = this.time.delayedCall(this.currentCustomerData.timeLimit, () => {
-            if (this.currentCustomer) {
-                // 손님이 제한 시간 내에 서비스를 받지 못했을 경우 화난 손님 표시
-                this.showAngryCustomer(() => {
-                    this.clearCurrentItem();
-                    this.spawnCustomer(); // 다음 손님 호출
-                });
-            }
+        this.customerTimer = this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.updateCustomerTimer();
+            },
+            callbackScope: this,
+            repeat: this.currentCustomerData.timeLimit / 1000 - 1
         });
     }
-    
     
     startCustomerTimer() {
         if (this.customerTimer) {
@@ -560,6 +571,24 @@ class MainGameScene extends Phaser.Scene {
             // 커튼 닫기
             this.openedcurtain.setVisible(false);
             this.curtain.setVisible(true);
+        }
+    }
+
+    updateCustomerTimer() {
+        let currentTime = parseInt(this.customerTimerText.text);
+        currentTime -= 1;
+    
+        if (currentTime > 0) {
+            this.customerTimerText.setText(currentTime);
+        } else {
+            // 손님 시간이 끝났을 때 화난 손님 표시
+            this.customerTimerText.setText("0");
+            if (this.currentCustomer) {
+                this.showAngryCustomer(() => {
+                    this.clearCurrentItem();
+                    this.spawnCustomer();
+                });
+            }
         }
     }
     
